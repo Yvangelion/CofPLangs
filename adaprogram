@@ -1,0 +1,67 @@
+with Ada.Text_IO; use Ada.Text_IO;
+with Ada.Float_Text_IO; use Ada.Float_Text_IO;
+
+procedure Arithmetic_Operations is
+   type Complex is record
+      Real: Float;
+      Imaginary: Float;
+   end record;
+
+   function Add(Left, Right: Complex) return Complex is
+   begin
+      return (Left.Real + Right.Real, Left.Imaginary + Right.Imaginary);
+   end Add;
+
+   function Subtract(Left, Right: Complex) return Complex is
+   begin
+      return (Left.Real - Right.Real, Left.Imaginary - Right.Imaginary);
+   end Subtract;
+
+   function Multiply(Left, Right: Complex) return Complex is
+   begin
+      return (Left.Real * Right.Real - Left.Imaginary * Right.Imaginary,
+              Left.Real * Right.Imaginary + Left.Imaginary * Right.Real);
+   end Multiply;
+
+   function Divide(Left, Right: Complex) return Complex is
+      Denominator: Float := Right.Real**2 + Right.Imaginary**2;
+   begin
+      return ((Left.Real * Right.Real + Left.Imaginary * Right.Imaginary) / Denominator,
+              (Left.Imaginary * Right.Real - Left.Real * Right.Imaginary) / Denominator);
+   end Divide;
+
+   Num1, Num2, Result: Complex;
+   Operator: Character := '*'; -- Change this to the operator you want to test
+begin
+   -- Hardcoded inputs for Num1 and Num2
+   Num1 := (Real => 32.0, Imaginary => 13.0);
+   Num2 := (Real => 6.0, Imaginary => 24.0);
+
+   Put("Enter operator (+, -, *, /): ");
+   Get(Operator);
+
+   -- Perform arithmetic operation based on the selected operator
+   case Operator is
+      when '+' =>
+         Result := Add(Num1, Num2);
+      when '-' =>
+         Result := Subtract(Num1, Num2);
+      when '*' =>
+         Result := Multiply(Num1, Num2);
+      when '/' =>
+         Result := Divide(Num1, Num2);
+      when others =>
+         Put_Line("Invalid operator");
+   end case;
+
+   -- Display result
+   Put_Line("Operator: " & Operator);
+   case Operator is
+      when '/' =>
+         Put_Line("Real Number Result: " & Float'Image(Result.Real));
+         Put_Line("Imaginary Number Result: " & Float'Image(Result.Imaginary) & "i");
+      when others =>
+         Put_Line("Real Number Result: " & Float'Image(Result.Real));
+         Put_Line("Imaginary Number Result: " & Float'Image(Result.Imaginary) & "i");
+   end case;
+end Arithmetic_Operations;
